@@ -23,6 +23,7 @@ pipeline {
                always {
                      junit skipPublishingChecks: true, testResults: 'build/test-results/test/TEST-*.xml'
                      jacoco execPattern: 'build/jacoco/*.exec'
+                     //pitmutation killRatioMustImprove: false, minimumKillRatio: 50.0, mutationStatsFile: 'build/reports/pitest/**/mutations.xml'
                      //sh './gradlew check pmdMain'
                }
             }
@@ -51,7 +52,7 @@ pipeline {
                         tools: [
                             pmdParser (pattern: 'build/reports/pmd/*.xml'),
                             spotBugs (pattern: 'build/reports/spotbugs/*.xml', useRankAsPriority: true),
-                            pitmutation killRatioMustImprove: false, minimumKillRatio: 50.0, mutationStatsFile: 'build/reports/pitest/**/mutations.xml'
+                            //pitmutation killRatioMustImprove: false, minimumKillRatio: 50.0, mutationStatsFile: 'build/reports/pitest/**/mutations.xml'
                         ]
                     )
                 }
