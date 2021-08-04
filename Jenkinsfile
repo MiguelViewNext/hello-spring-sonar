@@ -30,16 +30,15 @@ pipeline {
             }
         }
 
-        /*stage('SonarQube Analysis') {
-            when {
-
-            }
-            steps {
-                withSonarQubeEnv('sonarqube') {
-                    sh './gradlew sonarqube'
+        stage('SonarQube Analysis') {
+            when (expression {false}) {
+                steps {
+                    withSonarQubeEnv('sonarqube') {
+                        sh './gradlew sonarqube'
+                    }
                 }
             }
-        }*/
+        }
 
         stage('QA') {
             steps {
