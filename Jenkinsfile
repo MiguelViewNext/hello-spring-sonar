@@ -28,13 +28,16 @@ pipeline {
             }
         }
 
-        stage('SonarQube Analysis') {
+        /*stage('SonarQube Analysis') {
+            when {
+
+            }
             steps {
                 withSonarQubeEnv('sonarqube') {
                     sh './gradlew sonarqube'
                 }
             }
-        }
+        }*/
 
         stage('QA') {
             steps {
@@ -48,6 +51,7 @@ pipeline {
                         tools: [
                             pmdParser (pattern: 'build/reports/pmd/*.xml'),
                             spotBugs (pattern: 'build/reports/spotbugs/*.xml', useRankAsPriority: true)
+                            pitmutation killRatioMustImprove: false, minimumKillRatio: 50.0, mutationStatsFile: 'build/reports/pitest/**/mutations.xml'
                         ]
                     )
                 }
@@ -90,12 +94,12 @@ pipeline {
                 //sh 'java -jar build/libs/hello-spring-0.0.1-SNAPSHOT.jar'
             }
         }
-        stage('gitlab') {
-            steps {
-                 echo 'Notify GitLab'
-                 updateGitlabCommitStatus name: 'build', state: 'pending'
-                 updateGitlabCommitStatus name: 'build', state: 'success'
-            }
-        }
+        //stage('gitlab') {
+        //    steps {
+        //         echo 'Notify GitLab'
+        //         updateGitlabCommitStatus name: 'build', state: 'pending'
+        //         updateGitlabCommitStatus name: 'build', state: 'success'
+        //    }
+        //}
     }
 }
