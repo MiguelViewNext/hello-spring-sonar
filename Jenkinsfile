@@ -10,7 +10,7 @@ pipeline {
             steps {
                  echo 'Testing..'
                  withGradle {
-                    sh './gradlew clean test'
+                    sh './gradlew clean test pitest'
                  }
 
                  //sh './gradlew test'
@@ -50,7 +50,7 @@ pipeline {
                     recordIssues (
                         tools: [
                             pmdParser (pattern: 'build/reports/pmd/*.xml'),
-                            spotBugs (pattern: 'build/reports/spotbugs/*.xml', useRankAsPriority: true)
+                            spotBugs (pattern: 'build/reports/spotbugs/*.xml', useRankAsPriority: true),
                             pitmutation killRatioMustImprove: false, minimumKillRatio: 50.0, mutationStatsFile: 'build/reports/pitest/**/mutations.xml'
                         ]
                     )
