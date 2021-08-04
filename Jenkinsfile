@@ -31,13 +31,12 @@ pipeline {
         }
 
         stage('SonarQube Analysis') {
-            when (expression {false}) {
+            when { expression {false} }
                 steps {
                     withSonarQubeEnv('sonarqube') {
                         sh './gradlew sonarqube'
                     }
                 }
-            }
         }
 
         stage('QA') {
