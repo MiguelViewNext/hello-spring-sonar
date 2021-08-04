@@ -23,6 +23,7 @@ pipeline {
                always {
                      junit skipPublishingChecks: true, testResults: 'build/test-results/test/TEST-*.xml'
                      jacoco execPattern: 'build/jacoco/*.exec'
+                     recordIssues (enabledForFailure: true, tool: pit(pattern: 'build/reports/pitest/**/*.xml'))
                      //pitmutation killRatioMustImprove: false, minimumKillRatio: 50.0, mutationStatsFile: 'build/reports/pitest/**/mutations.xml'
                      //sh './gradlew check pmdMain'
                }
