@@ -36,4 +36,5 @@ out/
 ### VS Code ###
 .vscode/
 
-trivy-image.json
+### Trivy ###
+trivy-*.json
