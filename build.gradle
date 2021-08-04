@@ -35,6 +35,10 @@ jacocoTestReport {
     }
 }
 
+pmd {
+    ignoreFailures = true
+}
+
 spotbugs {
     ignoreFailures = true
 }
