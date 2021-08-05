@@ -113,8 +113,8 @@ pipeline {
             steps {
                 echo 'Delivering...'
                 //withDockerRegistry([credentialsId: 'docker-creds', url: 'http://10.250.9.3:5050']) {
-                withDockerRegistry([url: 'http://10.250.9.3:5050']) {
-                    //sh "docker-compose push imagename"
+                withDockerRegistry([credentialsId: 'RegistryGitLab', url: 'http://10.250.9.3:5050']) {
+                    sh "docker-compose push imagename"
                 }
             }
         }
