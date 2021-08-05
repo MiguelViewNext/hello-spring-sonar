@@ -31,6 +31,7 @@ pipeline {
         }
 
         stage('Analisis') {
+            //failFast true
             parallel {
                 stage('SonarQube Analysis') {
                     when { expression {false} }
@@ -97,8 +98,24 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying....'
+                //withDockerRegistry (registry: ['http://10.250.9.3:5050']) {
+                    
+                //}
+                /*sshagent (credentials: ['jenkins_ID']) {
+                    sh 'git tag MAIN-1.0.${BUILD_NUMBER}'           // Etiquetar un punto en el tiempo
+                    sh 'git push origin MAIN-1.0.${BUILD_NUMBER}'   // Subir la nueva etiqueta a GitLab
+                }*/
                 //sh 'docker-compose up -d'
                 //sh 'java -jar build/libs/hello-spring-0.0.1-SNAPSHOT.jar'
+            }
+        }
+        stage ('Delivery') {
+            steps {
+                echo 'Delivering...'
+                //withDockerRegistry([credentialsId: 'docker-creds', url: 'http://10.250.9.3:5050']) {
+                withDockerRegistry([url: 'http://10.250.9.3:5050']) {
+                    //sh "docker-compose push imagename"
+                }
             }
         }
         //stage('gitlab') {

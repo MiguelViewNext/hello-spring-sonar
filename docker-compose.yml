@@ -2,7 +2,7 @@ version: "3.0"
 
 services:
   hello-spring:
-    image: hello-spring-testing:latest
+    image: 10.250.9.3:5050/movbit/hello-spring-sonar/hello-spring:latest
     build: .
     ports:
       - "7777:7777"
