@@ -103,7 +103,7 @@ pipeline {
             steps {
                 echo 'Delivering...'
                 
-                withDockerRegistry([url: '10.250.9.3:5050', credentialsId: 'Registry_Gitlab']) {
+                withDockerRegistry([url: 'http://10.250.9.3:5050', credentialsId: 'Registry_Gitlab']) {
                     sh 'docker push 10.250.9.3:5050/movbit/hello-spring-sonar/hello-spring:latest'
                 }
             }
