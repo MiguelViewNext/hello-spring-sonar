@@ -16,11 +16,11 @@ pipeline {
                     //archiveArtifacts artifacts: 'build/test-results/test/binary/*.xml'
                 }
                 post {
-                always {
+                    always {
                         junit skipPublishingChecks: true, testResults: 'build/test-results/test/TEST-*.xml'
                         jacoco execPattern: 'build/jacoco/*.exec'
                         recordIssues (enabledForFailure: true, tool: pit(pattern: 'build/reports/pitest/**/*.xml'))
-                }
+                    }
                 }
         }
 
@@ -101,7 +101,7 @@ pipeline {
             steps {
                 echo 'Delivering...'
                 // tag 'docker tag hello-spring-testing:latest hello-spring-testing:TESTING-1.0.${BUILD_NUMBER}'
-                tag 'docker tag hello-spring-testing:latest 10.250.9.3:5050/movbit/hello-spring-sonar/hello-spring-testing:nose'
+                // tag 'docker tag hello-spring-testing:latest 10.250.9.3:5050/movbit/hello-spring-sonar/hello-spring-testing:nose'
                 withDockerRegistry([url: 'http://10.250.9.3:5050', credentialsId: 'Registry_Gitlab']) {
                     //sh 'docker push 10.250.9.3:5050/movbit/hello-spring-sonar/hello-spring:latest'
                     // sh 'docker tag hello-spring-testing:latest 10.250.9.3:5050/movbit/hello-spring-sonar/hello-spring-testing:nose'
