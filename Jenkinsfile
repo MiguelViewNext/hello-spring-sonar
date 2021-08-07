@@ -7,6 +7,7 @@ pipeline {
     }
     stages {
         stage('Test') {
+            when { expression {false} }
             steps {
                  echo 'Testing..'
                  withGradle {
@@ -29,10 +30,10 @@ pipeline {
                 stage('SonarQube Analysis') {
                     when { expression {false} }
                         steps {
-                        withSonarQubeEnv('sonarqube') {
-                            sh './gradlew sonarqube'
+                            withSonarQubeEnv('sonarqube') {
+                                sh './gradlew sonarqube'
+                            }
                         }
-                    }
                 }
 
                 stage('QA') {
@@ -54,9 +55,6 @@ pipeline {
                 }
             }
         }
-        
-
-        
 
         stage('Build') {
             steps {
@@ -102,9 +100,11 @@ pipeline {
         stage ('Delivery') {
             steps {
                 echo 'Delivering...'
-                
+                // tag 'docker tag hello-spring-testing:latest hello-spring-testing:TESTING-1.0.${BUILD_NUMBER}'
+                tag 'docker tag hello-spring-testing:latest hello-spring-testing:nose'
                 withDockerRegistry([url: 'http://10.250.9.3:5050', credentialsId: 'Registry_Gitlab']) {
-                    sh 'docker push 10.250.9.3:5050/movbit/hello-spring-sonar/hello-spring:latest'
+                    //sh 'docker push 10.250.9.3:5050/movbit/hello-spring-sonar/hello-spring:latest'
+                    sh 'docker push hello-spring-testing:nose'
                 }
             }
         }
