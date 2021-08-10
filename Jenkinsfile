@@ -85,18 +85,6 @@ pipeline {
             }
         }
 
-        stage('Deploy') {
-            steps {
-                echo 'Deploying....'
-                /*sshagent (credentials: ['jenkins_ID']) {
-                    sh 'git tag MAIN-1.0.${BUILD_NUMBER}'           // Etiquetar un punto en el tiempo
-                    sh 'git push origin MAIN-1.0.${BUILD_NUMBER}'   // Subir la nueva etiqueta a GitLab
-                }*/
-                //sh 'docker-compose up -d'
-                //sh 'java -jar build/libs/hello-spring-0.0.1-SNAPSHOT.jar'
-            }
-        }
-
         stage ('Delivery') {
             steps {
                 echo 'Delivering...'
@@ -107,6 +95,17 @@ pipeline {
                     // sh 'docker tag hello-spring-testing:latest 10.250.9.3:5050/movbit/hello-spring-sonar/hello-spring-testing:nose'
                     sh 'docker push 10.250.9.3:5050/movbit/hello-spring-sonar/hello-spring-testing:nose'
                 }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                echo 'Deploying....'
+                sshagent (credentials: ['appKey']) {
+                    sh "ssh app@10.250.9.3 'cd hello-spring && docker-compose pull && docker-compose up -d'"
+                    //sh 'docker-compose up -d'
+                }
+                //sh 'java -jar build/libs/hello-spring-0.0.1-SNAPSHOT.jar'
             }
         }
         /*stage('gitlab') {
