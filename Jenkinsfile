@@ -102,7 +102,8 @@ pipeline {
             steps {
                 echo 'Deploying....'
                 sshagent (credentials: ['appKey']) {
-                    sh "ssh app@10.250.9.3 'cd hello-spring && docker-compose pull && docker-compose up -d'"
+                    sh 'docker-compose pull'
+                    sh 'docker-compose up -d'
                     //sh 'docker-compose up -d'
                 }
                 //sh 'java -jar build/libs/hello-spring-0.0.1-SNAPSHOT.jar'
