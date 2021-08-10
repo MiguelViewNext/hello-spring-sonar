@@ -93,7 +93,7 @@ pipeline {
                 withDockerRegistry([url: 'http://10.250.9.3:5050', credentialsId: 'Registry_Gitlab']) {
                     //sh 'docker push 10.250.9.3:5050/movbit/hello-spring-sonar/hello-spring:latest'
                     // sh 'docker tag hello-spring-testing:latest 10.250.9.3:5050/movbit/hello-spring-sonar/hello-spring-testing:nose'
-                    sh 'docker push 10.250.9.3:5050/movbit/hello-spring-sonar/hello-spring-testing:nose'
+                    sh 'docker push 10.250.9.3:5050/movbit/hello-spring-sonar/hello-spring:latest'
                 }
             }
         }
