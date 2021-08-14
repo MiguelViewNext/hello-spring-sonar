@@ -9,11 +9,10 @@ pipeline {
         stage('Test') {
             when { expression {false} }
                 steps {
-                    echo 'Testing..'
+                    echo '\033[42m\033[97mTesting...\033[0m'
                     withGradle {
                         sh './gradlew clean test pitest'
                     }
-                    //archiveArtifacts artifacts: 'build/test-results/test/binary/*.xml'
                 }
                 post {
                     always {
@@ -58,20 +57,14 @@ pipeline {
 
         stage('Build') {
             steps {
-		        //sh './gradlew assemble'
+                echo '\033[42m\033[97mBuilding...\033[0m'
 		        sh 'docker-compose build'
             }
-            //post {
-        		//success {
-		        	//archiveArtifacts artifacts: 'build/libs/*.jar'
-                    //sh 'trivy image hello-spring-testing:latest'
-		        //}
-	        //}
         }
 
         stage('Security') {
             steps {
-                echo 'Security analysis...'
+                echo '\033[42m\033[97mSecurity analysis...\033[0m'
                 sh 'trivy image --format=json --output=trivy-image.json hello-spring-testing:latest'
             }
             post {
@@ -85,14 +78,10 @@ pipeline {
             }
         }
 
-        stage ('Delivery') {
+        stage ('Publish') {
             steps {
-                echo 'Delivering...'
-                // tag 'docker tag hello-spring-testing:latest hello-spring-testing:TESTING-1.0.${BUILD_NUMBER}'
-                // tag 'docker tag hello-spring-testing:latest 10.250.9.3:5050/movbit/hello-spring-sonar/hello-spring-testing:nose'
+                echo '\033[42m\033[97mPublising...\033[0m'
                 withDockerRegistry([url: 'http://10.250.9.3:5050', credentialsId: 'Registry_Gitlab']) {
-                    //sh 'docker push 10.250.9.3:5050/movbit/hello-spring-sonar/hello-spring:latest'
-                    // sh 'docker tag hello-spring-testing:latest 10.250.9.3:5050/movbit/hello-spring-sonar/hello-spring-testing:nose'
                     sh 'docker push 10.250.9.3:5050/movbit/hello-spring-sonar/hello-spring:latest'
                 }
             }
@@ -100,21 +89,18 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                echo 'Deploying....'
+                echo '\033[42m\033[97mDeploying....\033[0m'
                 sshagent (credentials: ['appKey']) {
-                    '''
-                        ssh -o StrictHostKeyChecking=no app@10.250.9.3 'cd hello-spring && docker-compose pull && docker-compose up -d'
-                    '''
+                    sh "ssh -o StrictHostKeyChecking=no app@10.250.9.3 'cd hello-spring && docker-compose pull && docker-compose up -d'"
                 }
-                //sh 'java -jar build/libs/hello-spring-0.0.1-SNAPSHOT.jar'
             }
         }
-        /*stage('gitlab') {
+        stage('gitlab') {
             steps {
-                echo 'Notify GitLab'
+                echo '\033[42m\033[97mNotify GitLab\033[0m'
                 updateGitlabCommitStatus name: 'build', state: 'pending'
                 updateGitlabCommitStatus name: 'build', state: 'success'
             }
-        }*/
+        }
     }
 }
